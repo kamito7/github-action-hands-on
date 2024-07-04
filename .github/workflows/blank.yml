@@ -15,17 +15,22 @@ jobs:
       name: development
       url: ${{ steps.get_release_url.outputs.release_url }}
 
+  generate-loc-report:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
     steps:
-      - uses: actions/checkout@v3
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      - name: Run a multi-line script
+      - name: Set TARGET_BRANCH for push or pull_request
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
-
-      - name: Set release url
-        id: get_release_url
-        run: echo "release_url=https://grafana.com" >> $GITHUB_OUTPUT
+          if [ "${{ github.event_name }}" == "push" ]; then
+            echo "TARGET_BRANCH=${{ github.ref_name }}" >> $GITHUB_ENV
+          elif [ "${{ github.event_name }}" == "pull_request" ]; then
+            echo "TARGET_BRANCH=${{ github.base_ref }}" >> $GITHUB_ENV
+          fi
+      - name: Get id and commit hash from status succeeded job on Inspecode
+        env:
+          TARGET_BRANCH: ${{ env.TARGET_BRANCH }}
+        run: |
+          echo "target branch ${{ env.TARGET_BRANCH }}"
 
