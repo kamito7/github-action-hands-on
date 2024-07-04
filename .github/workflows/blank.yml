@@ -15,11 +15,6 @@ jobs:
       name: development
       url: ${{ steps.get_release_url.outputs.release_url }}
 
-  generate-loc-report:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
     steps:
       - name: Set TARGET_BRANCH for push or pull_request
         run: |
