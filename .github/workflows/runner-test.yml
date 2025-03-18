@@ -44,11 +44,11 @@ jobs:
           images: |
             name=ghcr.io/${{ github.repository }}/actions-test
           tags: |
-            type=schedule,pattern=daily,enable=true,priority=10
-            type=ref,event=pr,prefix=pr-,enable=true,priority=5
-            type=ref,event=tag,enable=true,priority=5
+            type=schedule,pattern=daily,enable=true,priority=9
+            type=ref,event=pr,prefix=pr-,enable=true,priority=8
+            type=ref,event=tag,enable=true,priority=8
             type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
-            type=raw,value=dev,enable=${{ github.ref != 'refs/heads/main' }}
+            type=raw,value=dev,enable=${{ github.ref != 'refs/heads/main' }},priority=10
             type=semver,pattern={{version}},value=${{ steps.runner_version.outputs.runner_version }}
         
       - name: Build and push
